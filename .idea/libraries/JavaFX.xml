@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="JavaFX">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../Program Files/JetBrains/SDK/JavaFX/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../Program Files/JetBrains/SDK/JavaFX/lib" />
+    </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../../../Program Files/JetBrains/SDK/JavaFX/lib" recursive="false" />
+    <jarDirectory url="file://$PROJECT_DIR$/../../../Program Files/JetBrains/SDK/JavaFX/lib" recursive="false" type="SOURCES" />
+  </library>
+</component>

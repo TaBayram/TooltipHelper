@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="430.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <MenuBar VBox.vgrow="NEVER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#SaveColors" text="Save Custom Colors" />
+                  </items>
+                </Menu>
+                <Menu fx:id="menu_myColors" mnemonicParsing="false" text="My Colors" />
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="300.0" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="450.0" minHeight="300.0" minWidth="200.0" prefHeight="400.0" prefWidth="300.0" spacing="5.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <AnchorPane maxHeight="800.0" maxWidth="600.0" minHeight="180.0" minWidth="300.0" prefHeight="215.0" prefWidth="300.0">
+                           <children>
+                              <TextField fx:id="textField_Level1" layoutX="18.0" layoutY="95.0" onAction="#Generate" onMouseReleased="#SetSelectedText" prefHeight="26.0" prefWidth="264.0" promptText="Deals &lt;A021,DataA1&gt; damage!" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" />
+                              <Label layoutX="18.0" layoutY="14.0" text="Level Amount" />
+                              <Label layoutX="15.0" layoutY="77.0" text="Level 1" />
+                              <Button layoutX="219.0" layoutY="171.0" mnemonicParsing="false" onAction="#Generate" text="Generate" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="11.0" />
+                              <ColorPicker fx:id="colorPicker_Color" editable="true" layoutX="147.0" layoutY="31.0" promptText="Default" />
+                              <TextField fx:id="textField_Levels" layoutX="14.0" layoutY="32.0" prefHeight="25.0" prefWidth="91.0" promptText="3" />
+                              <Label layoutX="147.0" layoutY="14.0" text="Color of Level Indicator" />
+                              <ColorPicker fx:id="colorPicker_ColorSelected" editable="true" layoutX="14.0" layoutY="166.0" onAction="#Colorify" prefHeight="28.0" prefWidth="123.0" promptText="Default" />
+                              <Label layoutX="14.0" layoutY="142.0" text="Colorify Selected Text" />
+                              <Button layoutX="140.0" layoutY="167.0" minWidth="53.0" mnemonicParsing="false" onAction="#Colorify" prefHeight="26.0" prefWidth="54.0" style="-fx-font-size: 10px;" text="Colorify">
+                                 <font>
+                                    <Font size="7.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </VBox.margin>
+                        </AnchorPane>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="800.0" maxWidth="600.0" minViewportHeight="150.0" prefHeight="150.0" prefViewportHeight="300.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                           <content>
+                              <TextFlow fx:id="textFlow_Colored" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="176.0" minWidth="200.0" prefHeight="150.0" prefWidth="295.0" style="-fx-background-color: rgba(25,25,50,.75);" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <TextArea fx:id="textArea_Result" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="200.0" onKeyReleased="#GenerateColoredText" prefHeight="400.0" prefWidth="400.0" promptText="|cffffcc00Level 1|r - Deals &lt;A021,DataA1&gt; damage! |cffffcc00Level 2|r - Deals &lt;A021,DataA2&gt; damage! |cffffcc00Level 3|r - Deals &lt;A021,DataA3&gt; damage! " HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</StackPane>
