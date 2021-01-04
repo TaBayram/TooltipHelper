@@ -1,7 +1,9 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -9,8 +11,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 public class Controller {
 
@@ -21,6 +25,7 @@ public class Controller {
     public TextArea textArea_Result;
     public TextFlow textFlow_Colored;
     public ColorPicker colorPicker_ColorSelected;
+    public Menu menu_myColors;
 
     IndexRange selection;
     String beforeText;
@@ -34,6 +39,27 @@ public class Controller {
                 "|cffffcc00Level 3|r - Deals <A021,DataA3> |cffff0000damage|r! \n");
 
 
+        Preferences pref;
+        pref = Preferences.userNodeForPackage(Controller.class);
+        String myColorsString = pref.get("myColors","null");
+
+
+        List<String> myColors = Arrays.asList(myColorsString.split("-"));
+        if(myColorsString != "null"){
+            for(int i = 0; i < myColors.size(); i++){
+                try {
+                    String color = myColors.get(i);
+                    color = color.substring(2,8);
+
+                    MenuItem menuItem = new MenuItem(color);
+                    menuItem.setStyle("-fx-background-fill: #" + color + ";");
+                    menu_myColors.getItems().add(menuItem);
+                }
+                catch (Exception e){
+                    continue;
+                }
+            }
+        }
 
 
     }
@@ -184,5 +210,50 @@ public class Controller {
         return  textColor;
     }
 
+    public void SaveColors(ActionEvent actionEvent) {
+        var newColors = colorPicker_Color.getCustomColors();
+        newColors.addAll(colorPicker_ColorSelected.getCustomColors());
 
+
+        Preferences pref;
+        pref = Preferences.userNodeForPackage(Controller.class);
+        String myColorsString = pref.get("myColors","null");
+
+        var currentColors = (myColorsString.split("-"));
+        List<String> myColors = new ArrayList();
+
+        if(myColorsString != "null"){
+            for(int i = 0; i< currentColors.length; i ++){
+                myColors.add(currentColors[i]);
+            }
+        }
+
+
+        for (Color newColor: newColors) {
+            boolean isNew = true;
+            for(String myColor: myColors){
+                if(newColor.toString().equals(myColor)){
+                    isNew = false;
+                    break;
+                }
+            }
+
+            if(isNew){
+                myColors.add((newColor.toString()));
+            }
+        }
+        myColorsString ="";
+        for(int i = 0; i < myColors.size()-1; i++){
+            myColorsString += myColors.get(i) + "-";
+        }
+        myColorsString += myColors.get(myColors.size()-1);
+
+        System.out.println(myColorsString);
+
+        pref = Preferences.userNodeForPackage(Controller.class);
+        pref.put("myColors",myColorsString);
+
+
+
+    }
 }
