@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
@@ -11,6 +12,7 @@ import javafx.scene.text.TextFlow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 public class Controller {
 
@@ -21,17 +23,57 @@ public class Controller {
     public TextArea textArea_Result;
     public TextFlow textFlow_Colored;
     public ColorPicker colorPicker_ColorSelected;
+    public ComboBox comboBox_Indicators;
+    public TextField textField_NewIndicator;
+    public TextField textField_CurrentIndicator;
+    public CheckBox checkBox__LevelIndicatorSave;
+    public Label label_notify;
 
     IndexRange selection;
     String beforeText;
     IndexRange beforeSelection;
 
+    String separator = "s2p4r4t3";
+    String currentIndicator = "|d|sLevel |l|e - ";
+    Preferences preferences;
+    String preferencesLevelIndicators = "levelindicators";
+
+
     public void initialize() throws BackingStoreException {
+        preferences = Preferences.userNodeForPackage(Controller.class);
 
         colorPicker_Color.setValue(Color.valueOf("#ffcc00"));
         textArea_Result.setPromptText("|cffffcc00Level 1|r - Deals <A021,DataA1> |cffff0000damage|r! \n" +
                 "|cffffcc00Level 2|r - Deals <A021,DataA2> |cffff0000damage|r! \n" +
                 "|cffffcc00Level 3|r - Deals <A021,DataA3> |cffff0000damage|r! \n");
+
+
+
+        //preferences.clear();
+
+        List<String> list = new ArrayList<>();
+        list.add("|sLevel |l|e -");
+        //preferences.put(preferencesLevelIndicators,"|d|sLevel |l|e - ");
+
+        var levelIndicatorsRaw = preferences.get(preferencesLevelIndicators,"|d|sLevel |l|e -");
+
+
+        var levelIndicatorsSplit = levelIndicatorsRaw.split(separator);
+
+        for (String indicator:levelIndicatorsSplit) {
+            if(indicator.startsWith("|d")){
+                currentIndicator = indicator.substring(2);
+                textField_CurrentIndicator.setText(currentIndicator);
+                comboBox_Indicators.getItems().add(currentIndicator);
+            }
+            else{
+                comboBox_Indicators.getItems().add(indicator);
+            }
+
+
+        }
+
+        comboBox_Indicators.setValue(comboBox_Indicators.getItems().get(0));
 
 
 
@@ -59,11 +101,7 @@ public class Controller {
 
         }catch(Exception e)
         {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error Dialog");
-            alert.setHeaderText(null);
-            alert.setContentText("Level amount can't be non numeric.");
-            alert.showAndWait();
+            ErrorBox("Level amount can't be non numeric.");
             return;
 
         }
@@ -71,7 +109,9 @@ public class Controller {
 
         List<String> generatedLevels = new ArrayList<>();
         for(int i = 1; i <= levels; i ++){
-            String textIndicator = textColor + "Level " + i + "|r - ";
+            IndicatorFormat(textColor,i);
+
+            String textIndicator = IndicatorFormat(textColor,i);;
             String level = "";
             for (int j = 0; j < splitted.length; j++){
                 level += splitted[j];
@@ -94,18 +134,28 @@ public class Controller {
 
 
     public void GenerateColoredText(KeyEvent keyEvent) {
-        String[] splittedText = textArea_Result.getText().replace("|c","cc").split("ccff");
+        String[] splittedText = textArea_Result.getText().split("\\|cff");
+        var rawText = textArea_Result.getText();
 
+        if(rawText.length() == 0) return;
 
         textFlow_Colored.getChildren().clear();
         int newHeight = 100;
         for(int i = 0; i < splittedText.length; i ++){
             try {
-                String[] endSplitted = splittedText[i].replace("|r","rrrrrrrr").split("rrrrrrrr");
+                String[] endSplitted = splittedText[i].split("\\|r");
 
-                Text text = new Text();
-                text.setText(endSplitted[0].substring(6));
-                text.setFill(Color.valueOf(splittedText[i].substring(0, 6)));
+                if(i == 0 && rawText.indexOf("|cff") >= splittedText[0].length()){
+                    Text text = new Text();
+                    text.setFill(Color.WHITE);
+                    text.setText(splittedText[0]);
+                    textFlow_Colored.getChildren().addAll(text);
+
+                }
+                else {
+                    Text text = new Text();
+                    text.setText(endSplitted[0].substring(6));
+                    text.setFill(Color.valueOf(splittedText[i].substring(0, 6)));
 
                 if(endSplitted.length == 1){
                     textFlow_Colored.getChildren().add(text);
@@ -119,6 +169,7 @@ public class Controller {
                     }
 
                     Text text1 = new Text();
+                    text1.setFill(Color.WHITE);
                     text1.setText(nonColored);
 
 
@@ -126,13 +177,12 @@ public class Controller {
 
                     textFlow_Colored.getChildren().addAll(text,text1);
 
-                    System.out.println("1:" +text.getBoundsInLocal().getHeight());
-                    System.out.println("2:" + (text1.getBoundsInLocal().getHeight() - text1.getFont().getSize()*1.4));
                     if(text1.getBoundsInLocal().getHeight() > text.getBoundsInLocal().getHeight())
                         newHeight += text1.getBoundsInLocal().getHeight() - text1.getFont().getSize()*1.4;
                     else
                         newHeight += text.getBoundsInLocal().getHeight();
 
+                }
                 }
 
 
@@ -184,5 +234,186 @@ public class Controller {
         return  textColor;
     }
 
+    public String IndicatorFormat(String textColor, int level){
+        String indicator = currentIndicator.replace("|s",textColor);
+        indicator = indicator.replace("|e","|r");
+        indicator = indicator.replace("|l", ""+level);
+
+        return indicator;
+    }
+
+
+    public void LevelIndicatorAdd(ActionEvent actionEvent) {
+        String newIndicator = textField_NewIndicator.getText();
+
+        boolean hasStart = false;
+        boolean hasEnd = false;
+        boolean hasLevel = false;
+        if(newIndicator.contains("|s")){
+            hasStart = true;
+        }
+        if(newIndicator.contains("|e")){
+            hasEnd = true;
+        }
+        if(newIndicator.contains("|l")){
+            hasLevel = true;
+        }
+
+        if(hasStart && !hasEnd){
+            ErrorBox("You must put color ending which is: |e  !");
+            return;
+        }
+        if(!hasStart && hasEnd){
+            ErrorBox("You must put color starting which is: |s  !");
+            return;
+        }
+        if(!hasLevel){
+            ErrorBox("You must put level which is: |l  !");
+            return;
+        }
+
+        Preferences preferenes;
+        preferenes = Preferences.userNodeForPackage(Controller.class);
+        var levelIndicatorsRaw = preferenes.get(preferencesLevelIndicators,"null");
+        if(levelIndicatorsRaw != null)
+            preferenes.put(preferencesLevelIndicators,levelIndicatorsRaw + separator + newIndicator);
+        else
+            preferenes.put(preferencesLevelIndicators,newIndicator);
+
+        NotifyOperation("Added!");
+        comboBox_Indicators.getItems().add(newIndicator);
+
+
+
+
+
+    }
+
+    public void LevelIndicatorRemove(ActionEvent actionEvent) {
+        String removingText = (String) comboBox_Indicators.getValue();
+
+
+        var levelIndicatorsRaw = preferences.get(preferencesLevelIndicators,"null");
+
+        if(levelIndicatorsRaw == null) return;
+
+        var levelIndicatorsSplit = levelIndicatorsRaw.split(separator);
+
+        String indicators = "";
+        for(int i = 0; i < levelIndicatorsSplit.length; i++) {
+            var indicator =  levelIndicatorsSplit[i];
+            if(indicator.startsWith("|d")){
+                indicator = indicator.substring(2);
+            }
+            if(!indicator.equals(removingText)){
+                if(i != 0) indicators += separator;
+                indicators += levelIndicatorsSplit[i];
+            }
+            else{
+
+            }
+
+        }
+
+        NotifyOperation("Removed!");
+        comboBox_Indicators.getItems().remove(removingText);
+        preferences.put(preferencesLevelIndicators,indicators);
+    }
+
+
+    public void LevelIndicatorChooseAsCurrentIndicator(ActionEvent actionEvent) {
+        String newCurrentIndicator = (String) comboBox_Indicators.getValue();
+
+        var levelIndicatorsRaw = preferences.get(preferencesLevelIndicators,"null");
+        if(levelIndicatorsRaw == null) return;
+        var levelIndicatorsSplit = levelIndicatorsRaw.split(separator);
+
+        String indicators = "";
+        for(int i = 0; i < levelIndicatorsSplit.length; i++) {
+
+            var indicator =  levelIndicatorsSplit[i];
+
+            if(indicator.startsWith("|d")){
+                indicator = indicator.substring(2);
+            }
+
+            if(indicator.equals(newCurrentIndicator)){
+                if(i != 0) indicators += separator;
+                currentIndicator = indicator;
+                textField_CurrentIndicator.setText(indicator);
+
+                indicators += "|d"+indicator;
+            }
+            else{
+                if(i != 0) indicators += separator;
+                indicators += indicator;
+            }
+
+        }
+
+        NotifyOperation("Set as current!");
+        preferences.put(preferencesLevelIndicators,indicators);
+
+    }
+
+    public void LevelIndicatorPreview(ActionEvent actionEvent) {
+        var previewIndicator = textField_NewIndicator.getText();
+
+        String color = colorPicker_Color.getValue().toString();
+        var textColor = ColorFormat(color);
+
+
+
+        List<String> generatedLevels = new ArrayList<>();
+        for(int i = 1; i <= 6; i ++){
+            String indicator = previewIndicator.replace("|s",textColor);
+            indicator = indicator.replace("|e","|r");
+            indicator = indicator.replace("|l", ""+i);
+
+            String textIndicator = indicator;;
+            String level = "";
+
+            generatedLevels.add(textIndicator+level);
+
+
+        }
+
+        textArea_Result.setText("");
+        for (String string:generatedLevels) {
+            textArea_Result.setText(textArea_Result.getText() + string + " \n");
+
+        }
+
+        GenerateColoredText(null);
+
+
+
+    }
+
+    public void ErrorBox(String text){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
+
+    public void NotifyOperation(String text){
+        Task task = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                Thread.sleep(2000);
+                return null;
+            }
+        };
+
+        label_notify.setText(text);
+        label_notify.visibleProperty().bind(task.runningProperty());
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
+
+
+    }
 
 }
