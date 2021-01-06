@@ -28,6 +28,8 @@ public class Controller {
     public TextField textField_CurrentIndicator;
     public CheckBox checkBox__LevelIndicatorSave;
     public Label label_notify;
+    public RadioButton radioButton_Start;
+    public RadioButton radioButton_End;
 
     IndexRange selection;
     String beforeText;
@@ -92,7 +94,7 @@ public class Controller {
 
         String level1 = textField_Level1.getText();
 
-        String[] splitted = level1.split("1>");
+
 
         String levelsText = textField_Levels.getText();
         int levels = 0;
@@ -109,15 +111,25 @@ public class Controller {
 
         List<String> generatedLevels = new ArrayList<>();
         for(int i = 1; i <= levels; i ++){
-            IndicatorFormat(textColor,i);
-
             String textIndicator = IndicatorFormat(textColor,i);;
             String level = "";
+
+            String[] splitted = level1.split("1>");
             for (int j = 0; j < splitted.length; j++){
                 level += splitted[j];
                 if(j != splitted.length-1) level+= i+">";
+
             }
-            generatedLevels.add(textIndicator+level);
+            level = SplitByRegex(level1,"1>",i,">");
+            level = SplitByRegex(level,"1,%>",i,",%>");
+            level = SplitByRegex(level,"1,\\.>",i,",.>");
+
+
+
+            if(radioButton_Start.isSelected())
+                generatedLevels.add(textIndicator+level);
+            else
+                generatedLevels.add(level + textIndicator);
 
 
         }
@@ -131,6 +143,19 @@ public class Controller {
 
 
     }
+
+    public String SplitByRegex(String text,String split,int level,String replace){
+        String[] splitted = text.split(split);
+        String newText = "";
+        for (int j = 0; j < splitted.length; j++){
+            newText += splitted[j];
+            if(j != splitted.length-1) newText+= level+replace;
+        }
+
+        return newText;
+
+    }
+
 
 
     public void GenerateColoredText(KeyEvent keyEvent) {
@@ -415,5 +440,6 @@ public class Controller {
 
 
     }
+
 
 }

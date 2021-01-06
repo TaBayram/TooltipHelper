@@ -9,9 +9,9 @@
    <children>
       <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="300.0" minWidth="300.0" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="450.0" minHeight="300.0" minWidth="200.0" prefHeight="400.0" prefWidth="300.0" spacing="5.0">
+            <VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="550.0" minHeight="300.0" minWidth="200.0" prefHeight="400.0" prefWidth="300.0" spacing="5.0" HBox.hgrow="ALWAYS">
                <children>
-                  <TabPane maxHeight="800.0" maxWidth="600.0" minHeight="180.0" minWidth="300.0" prefHeight="235.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="15.0" tabMaxWidth="50.0" tabMinHeight="10.0">
+                  <TabPane maxHeight="275.0" maxWidth="600.0" minHeight="180.0" minWidth="300.0" prefHeight="200.0" prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="15.0" tabMaxWidth="50.0" tabMinHeight="10.0" VBox.vgrow="ALWAYS">
                     <tabs>
                       <Tab text="tooltip">
                         <content>
@@ -19,20 +19,26 @@
                                  <children>
                                     <AnchorPane maxHeight="800.0" maxWidth="600.0" minHeight="180.0" minWidth="300.0" prefHeight="235.0" prefWidth="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <TextField fx:id="textField_Level1" layoutX="18.0" layoutY="118.0" onAction="#Generate" onMouseReleased="#SetSelectedText" prefHeight="26.0" prefWidth="264.0" promptText="Deals &lt;A021,DataA1&gt; damage!" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" />
-                                          <Label layoutX="77.0" layoutY="14.0" text="Levels" />
-                                          <Label layoutX="15.0" layoutY="93.0" text="Level 1" />
+                                          <TextField fx:id="textField_Level1" layoutX="18.0" layoutY="118.0" onAction="#Generate" onMouseReleased="#SetSelectedText" prefHeight="26.0" prefWidth="264.0" promptText="Deals &lt;A021,DataA1&gt; damage!" AnchorPane.bottomAnchor="79.0" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="18.0" />
+                                          <Label layoutX="88.0" layoutY="14.0" text="Levels" />
+                                          <Label layoutX="15.0" layoutY="93.0" text="Level 1" AnchorPane.bottomAnchor="113.0" />
                                           <Button layoutX="219.0" layoutY="171.0" mnemonicParsing="false" onAction="#Generate" text="Generate" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="11.0" />
-                                          <ColorPicker fx:id="colorPicker_Color" editable="true" layoutX="138.0" layoutY="31.0" promptText="Default" />
-                                          <TextField fx:id="textField_Levels" layoutX="75.0" layoutY="32.0" prefHeight="26.0" prefWidth="42.0" promptText="3" text="1" />
-                                          <Label layoutX="142.0" layoutY="14.0" text="Color of Level Indicator" />
-                                          <ColorPicker fx:id="colorPicker_ColorSelected" editable="true" layoutX="15.0" layoutY="179.0" onAction="#Colorify" prefHeight="28.0" prefWidth="123.0" promptText="Default" AnchorPane.leftAnchor="15.0" />
-                                          <Label layoutX="15.0" layoutY="155.0" text="Colorify Selected Text" AnchorPane.leftAnchor="15.0" />
-                                          <Button layoutX="141.0" layoutY="180.0" minWidth="53.0" mnemonicParsing="false" onAction="#Colorify" prefHeight="26.0" prefWidth="54.0" style="-fx-font-size: 10px;" text="Colorify" AnchorPane.leftAnchor="141.0">
+                                          <ColorPicker fx:id="colorPicker_Color" editable="true" layoutX="150.0" layoutY="32.0" promptText="Default" />
+                                          <TextField fx:id="textField_Levels" layoutX="88.0" layoutY="32.0" prefHeight="26.0" prefWidth="42.0" promptText="3" text="1" />
+                                          <Label layoutX="150.0" layoutY="14.0" text="Color of Level Indicator" />
+                                          <ColorPicker fx:id="colorPicker_ColorSelected" editable="true" layoutX="15.0" layoutY="179.0" onAction="#Colorify" prefHeight="28.0" prefWidth="123.0" promptText="Default" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="15.0" />
+                                          <Label layoutX="15.0" layoutY="155.0" text="Colorify Selected Text" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="15.0" />
+                                          <Button layoutX="141.0" layoutY="180.0" minWidth="53.0" mnemonicParsing="false" onAction="#Colorify" prefHeight="26.0" prefWidth="54.0" style="-fx-font-size: 10px;" text="Colorify" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="141.0">
                                              <font>
                                                 <Font size="7.0" />
                                              </font>
                                           </Button>
+                                          <RadioButton fx:id="radioButton_Start" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" selected="true" text="At Start">
+                                             <toggleGroup>
+                                                <ToggleGroup fx:id="RadioGroup1" />
+                                             </toggleGroup>
+                                          </RadioButton>
+                                          <RadioButton fx:id="radioButton_End" layoutX="14.0" layoutY="44.0" mnemonicParsing="false" text="At End" toggleGroup="$RadioGroup1" />
                                        </children>
                                     </AnchorPane>
                                  </children></AnchorPane>
@@ -44,11 +50,11 @@
                                  <children>
                                     <ComboBox fx:id="comboBox_Indicators" layoutX="15.0" layoutY="67.0" prefHeight="25.0" prefWidth="267.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
                                     <TextField fx:id="textField_NewIndicator" layoutX="14.0" layoutY="142.0" prefHeight="25.0" prefWidth="267.0" promptText="|s : Color Start |e : Color end |l : level number" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.0" />
-                                    <Button layoutX="223.0" layoutY="174.0" mnemonicParsing="false" onAction="#LevelIndicatorAdd" prefHeight="25.0" prefWidth="60.0" text="Add" AnchorPane.bottomAnchor="5.0" />
+                                    <Button layoutX="223.0" layoutY="174.0" mnemonicParsing="false" onAction="#LevelIndicatorAdd" prefHeight="25.0" prefWidth="60.0" text="Add" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="18.0" />
                                     <TextField fx:id="textField_CurrentIndicator" editable="false" layoutX="15.0" layoutY="20.0" prefHeight="25.0" prefWidth="265.0" promptText="Current Indicator" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-                                    <Button layoutX="149.0" layoutY="97.0" mnemonicParsing="false" onAction="#LevelIndicatorRemove" prefHeight="25.0" prefWidth="60.0" text="Remove" />
-                                    <Button layoutX="223.0" layoutY="97.0" mnemonicParsing="false" onAction="#LevelIndicatorChooseAsCurrentIndicator" prefHeight="25.0" prefWidth="59.0" text="Use" />
-                                    <Button layoutX="150.0" layoutY="174.0" mnemonicParsing="false" onAction="#LevelIndicatorPreview" text="Preview" AnchorPane.bottomAnchor="5.0" />
+                                    <Button layoutX="149.0" layoutY="97.0" mnemonicParsing="false" onAction="#LevelIndicatorRemove" prefHeight="25.0" prefWidth="60.0" text="Remove" AnchorPane.rightAnchor="93.0" />
+                                    <Button layoutX="223.0" layoutY="97.0" mnemonicParsing="false" onAction="#LevelIndicatorChooseAsCurrentIndicator" prefHeight="25.0" prefWidth="59.0" text="Use" AnchorPane.rightAnchor="18.0" />
+                                    <Button layoutX="150.0" layoutY="174.0" mnemonicParsing="false" onAction="#LevelIndicatorPreview" text="Preview" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="93.0" />
                                     <Label fx:id="label_notify" layoutX="15.0" layoutY="111.0" prefHeight="17.0" prefWidth="97.0">
                                        <textFill>
                                           <LinearGradient endX="1.0" endY="1.0">
@@ -69,7 +75,7 @@
                                     </Label>
                                     <Label layoutX="18.0" layoutY="5.0" text="Current" AnchorPane.topAnchor="5.0" />
                                     <Label layoutX="18.0" layoutY="50.0" text="List" />
-                                    <Label layoutX="18.0" layoutY="133.0" text="New Indicator" />
+                                    <Label layoutX="14.0" layoutY="155.0" text="New Indicator" AnchorPane.bottomAnchor="68.0" />
                                  </children>
                               </AnchorPane>
                         </content>
