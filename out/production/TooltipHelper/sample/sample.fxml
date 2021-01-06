@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
@@ -55,24 +54,7 @@
                                     <Button layoutX="149.0" layoutY="97.0" mnemonicParsing="false" onAction="#LevelIndicatorRemove" prefHeight="25.0" prefWidth="60.0" text="Remove" AnchorPane.rightAnchor="93.0" />
                                     <Button layoutX="223.0" layoutY="97.0" mnemonicParsing="false" onAction="#LevelIndicatorChooseAsCurrentIndicator" prefHeight="25.0" prefWidth="59.0" text="Use" AnchorPane.rightAnchor="18.0" />
                                     <Button layoutX="150.0" layoutY="174.0" mnemonicParsing="false" onAction="#LevelIndicatorPreview" text="Preview" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="93.0" />
-                                    <Label fx:id="label_notify" layoutX="15.0" layoutY="111.0" prefHeight="17.0" prefWidth="97.0">
-                                       <textFill>
-                                          <LinearGradient endX="1.0" endY="1.0">
-                                             <stops>
-                                                <Stop>
-                                                   <color>
-                                                      <Color />
-                                                   </color>
-                                                </Stop>
-                                                <Stop offset="1.0">
-                                                   <color>
-                                                      <Color red="0.1259259283542633" green="1.0" blue="0.1111111119389534" />
-                                                   </color>
-                                                </Stop>
-                                             </stops>
-                                          </LinearGradient>
-                                       </textFill>
-                                    </Label>
+                                    <Label fx:id="label_notify" layoutX="10.0" layoutY="122.0" prefHeight="17.0" prefWidth="277.0" textFill="#ff9500" />
                                     <Label layoutX="18.0" layoutY="5.0" text="Current" AnchorPane.topAnchor="5.0" />
                                     <Label layoutX="18.0" layoutY="50.0" text="List" />
                                     <Label layoutX="14.0" layoutY="155.0" text="New Indicator" AnchorPane.bottomAnchor="68.0" />

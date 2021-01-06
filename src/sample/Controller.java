@@ -37,6 +37,7 @@ public class Controller {
 
     String separator = "s2p4r4t3";
     String currentIndicator = "|d|sLevel |l|e - ";
+    String defaultIndicator = "|sLevel |l|e - ";
     Preferences preferences;
     String preferencesLevelIndicators = "levelindicators";
 
@@ -53,12 +54,12 @@ public class Controller {
 
         //preferences.clear();
 
-        List<String> list = new ArrayList<>();
-        list.add("|sLevel |l|e -");
-        //preferences.put(preferencesLevelIndicators,"|d|sLevel |l|e - ");
 
-        var levelIndicatorsRaw = preferences.get(preferencesLevelIndicators,"|d|sLevel |l|e -");
-
+        var levelIndicatorsRaw = preferences.get(preferencesLevelIndicators,"");
+        if(levelIndicatorsRaw.isEmpty()) {
+            levelIndicatorsRaw = "|d" + defaultIndicator;
+            preferences.put(preferencesLevelIndicators,"|d"+defaultIndicator);
+        }
 
         var levelIndicatorsSplit = levelIndicatorsRaw.split(separator);
 
@@ -165,6 +166,17 @@ public class Controller {
         if(rawText.length() == 0) return;
 
         textFlow_Colored.getChildren().clear();
+
+        if(splittedText.length == 1){
+            Text text1 = new Text();
+            text1.setFill(Color.WHITE);
+            text1.setText(splittedText[0]);
+
+            textFlow_Colored.getChildren().add(text1);
+            textFlow_Colored.setMinHeight(100+text1.getBoundsInLocal().getHeight() - text1.getFont().getSize()*1.4);
+            return;
+        }
+
         int newHeight = 100;
         for(int i = 0; i < splittedText.length; i ++){
             try {
@@ -212,7 +224,7 @@ public class Controller {
 
 
             }
-            catch(StringIndexOutOfBoundsException stringIndexOutOfBoundsException){
+            catch(Exception exception){
                 continue;
             }
         }
@@ -300,13 +312,29 @@ public class Controller {
         Preferences preferenes;
         preferenes = Preferences.userNodeForPackage(Controller.class);
         var levelIndicatorsRaw = preferenes.get(preferencesLevelIndicators,"null");
-        if(levelIndicatorsRaw != null)
-            preferenes.put(preferencesLevelIndicators,levelIndicatorsRaw + separator + newIndicator);
-        else
-            preferenes.put(preferencesLevelIndicators,newIndicator);
+        if(levelIndicatorsRaw != null){
+            boolean isUnique = true;
+            for(int i = 0; i < comboBox_Indicators.getItems().size(); i++) {
+                var indicator =  (String)comboBox_Indicators.getItems().get(i);
+                if(indicator.equals(newIndicator)){
+                    isUnique = false;
+                }
 
-        NotifyOperation("Added!");
-        comboBox_Indicators.getItems().add(newIndicator);
+            }
+            if(isUnique) {
+                preferenes.put(preferencesLevelIndicators, levelIndicatorsRaw + separator + newIndicator);
+                NotifyOperation("Added!");
+                comboBox_Indicators.getItems().add(newIndicator);
+            }
+            else
+                NotifyOperation("It already exists!");
+
+        }
+        else {
+            preferenes.put(preferencesLevelIndicators, newIndicator);
+            NotifyOperation("Added!");
+            comboBox_Indicators.getItems().add(newIndicator);
+        }
 
 
 
@@ -317,6 +345,10 @@ public class Controller {
     public void LevelIndicatorRemove(ActionEvent actionEvent) {
         String removingText = (String) comboBox_Indicators.getValue();
 
+        if(removingText.equals(defaultIndicator)) {
+            NotifyOperation("You can't remove default indicator!");
+            return;
+        }
 
         var levelIndicatorsRaw = preferences.get(preferencesLevelIndicators,"null");
 
